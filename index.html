@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Самоаудит маркетинга — простой инструмент от Никиты Кравченко</title>
 
-  <!-- PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
   <style>
     * {
       box-sizing: border-box;
@@ -354,12 +350,128 @@
       display: none;
     }
 
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
     .result-score {
       font-size: 64px;
       line-height: 1;
       font-weight: 800;
       letter-spacing: -2px;
-      margin-bottom: 10px;
+    }
+
+    .score-info-btn {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #eef0f3;
+      color: #7a818c;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 24px;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .score-info-btn:hover {
+      background: #e2e5ea;
+      color: #3454d1;
+    }
+
+    .score-info-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(20, 25, 35, .45);
+      opacity: 0;
+      visibility: hidden;
+      transition: .2s ease;
+    }
+
+    .score-info-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .score-info-modal {
+      position: relative;
+      width: min(560px, 100%);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding: 32px;
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 20px 60px rgba(20, 30, 50, .2);
+      transform: translateY(10px);
+      transition: .2s ease;
+    }
+
+    .score-info-overlay.show .score-info-modal {
+      transform: translateY(0);
+    }
+
+    .score-info-modal h3 {
+      margin: 0 0 24px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .score-info-item {
+      margin-bottom: 18px;
+    }
+
+    .score-info-item:last-of-type {
+      margin-bottom: 20px;
+    }
+
+    .score-info-item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    .score-info-item p {
+      margin: 0;
+      color: #646b75;
+      font-size: 15px;
+    }
+
+    .score-info-note {
+      margin: 0;
+      padding-top: 18px;
+      border-top: 1px solid #e5e8ed;
+      color: #7a818c;
+      font-size: 13px;
+    }
+
+    .score-info-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #eef0f3;
+      color: #646b75;
+      font-size: 22px;
+      line-height: 32px;
+      cursor: pointer;
+    }
+
+    .score-info-close:hover {
+      background: #e2e5ea;
     }
 
     .result-title {
@@ -374,11 +486,11 @@
       font-size: 17px;
     }
 
-    .plan-heading {
+    .plan-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 16px;
       margin-bottom: 8px;
     }
 
@@ -389,11 +501,11 @@
 
     .pdf-btn {
       flex: 0 0 auto;
+      padding: 9px 14px;
       border: 1px solid #d9dee6;
       border-radius: 10px;
-      padding: 9px 13px;
       background: #fff;
-      color: #4d5560;
+      color: #3d434c;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -553,27 +665,25 @@
     }
 
     /* =========================
-       PDF REPORT
+       PDF
     ========================= */
 
-    #pdfReport {
-      position: fixed;
-      left: -10000px;
+    .pdf-report {
+      position: absolute;
+      left: -100000px;
       top: 0;
       width: 794px;
-      padding: 56px;
+      padding: 52px;
       background: #fff;
       color: #17191c;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-      line-height: 1.5;
-      z-index: -1;
     }
 
-    .pdf-header {
+    .pdf-report-header {
       margin-bottom: 34px;
     }
 
-    .pdf-label {
+    .pdf-report-label {
       display: inline-block;
       margin-bottom: 18px;
       padding: 7px 12px;
@@ -584,50 +694,63 @@
       font-weight: 700;
     }
 
-    .pdf-header h1 {
-      margin: 0 0 22px;
+    .pdf-report h1 {
+      margin: 0 0 10px;
       max-width: none;
-      font-size: 42px;
-      line-height: 1.08;
-      letter-spacing: -1.5px;
+      font-size: 34px;
+      line-height: 1.1;
+      letter-spacing: -1px;
       text-align: left;
     }
 
-    .pdf-score {
-      margin-bottom: 6px;
+    .pdf-report-date {
+      color: #8a919b;
+      font-size: 13px;
+    }
+
+    .pdf-report-score {
+      margin-bottom: 28px;
+      padding: 26px;
+      border-radius: 18px;
+      background: #f5f7fb;
+      border: 1px solid #e1e5ec;
+    }
+
+    .pdf-report-score-value {
+      margin-bottom: 8px;
       color: #3454d1;
-      font-size: 58px;
+      font-size: 48px;
       line-height: 1;
       font-weight: 800;
-      letter-spacing: -2px;
+      letter-spacing: -1.5px;
     }
 
-    .pdf-result-title {
-      margin: 0 0 12px;
-      font-size: 28px;
-      line-height: 1.15;
-    }
-
-    .pdf-result-description {
-      margin: 0;
-      color: #646b75;
-      font-size: 16px;
-    }
-
-    .pdf-section-title {
-      margin: 34px 0 8px;
+    .pdf-report-score-title {
+      margin-bottom: 8px;
       font-size: 23px;
+      font-weight: 800;
+    }
+
+    .pdf-report-score-description {
+      color: #646b75;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+
+    .pdf-report-plan-title {
+      margin: 0 0 8px;
+      font-size: 24px;
       line-height: 1.2;
     }
 
-    .pdf-section-intro {
+    .pdf-report-plan-intro {
       margin: 0 0 20px;
       color: #646b75;
       font-size: 15px;
     }
 
-    .pdf-recommendation {
-      margin-bottom: 14px;
+    .pdf-report-recommendation {
+      margin-bottom: 12px;
       padding: 18px;
       border-radius: 14px;
       border: 1px solid #e3e6eb;
@@ -635,60 +758,70 @@
       page-break-inside: avoid;
     }
 
-    .pdf-recommendation.high {
+    .pdf-report-recommendation.high {
       border-color: #f0caca;
       background: #fff8f8;
     }
 
-    .pdf-recommendation.medium {
+    .pdf-report-recommendation.medium {
       border-color: #f1d9ad;
       background: #fffaf1;
     }
 
-    .pdf-recommendation-top {
+    .pdf-report-recommendation-top {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       margin-bottom: 8px;
     }
 
-    .pdf-priority {
+    .pdf-report-priority {
       display: inline-block;
       padding: 4px 8px;
       border-radius: 999px;
       font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .04em;
+      letter-spacing: .03em;
     }
 
-    .pdf-priority.high {
+    .pdf-report-priority.high {
       background: #f9dddd;
       color: #a12626;
     }
 
-    .pdf-priority.medium {
+    .pdf-report-priority.medium {
       background: #f8e8c8;
       color: #9a5a00;
     }
 
-    .pdf-recommendation h3 {
+    .pdf-report-recommendation h3 {
       margin: 0;
       font-size: 16px;
       line-height: 1.3;
     }
 
-    .pdf-recommendation p {
+    .pdf-report-recommendation p {
       margin: 0;
       color: #5e6570;
       font-size: 14px;
+      line-height: 1.55;
     }
 
-    .pdf-footer {
-      margin-top: 34px;
-      padding-top: 18px;
+    .pdf-report-empty {
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid #e3e6eb;
+      color: #5e6570;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .pdf-report-footer {
+      margin-top: 32px;
+      padding-top: 16px;
       border-top: 1px solid #e5e8ed;
-      color: #9298a1;
+      color: #969ca5;
       font-size: 11px;
     }
 
@@ -750,14 +883,17 @@
         padding: 20px;
       }
 
-      .plan-heading {
+      .score-info-modal {
+        padding: 26px 22px;
+      }
+
+      .plan-header {
         align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
       }
 
       .pdf-btn {
-        width: 100%;
+        padding: 8px 11px;
+        font-size: 12px;
       }
     }
   </style>
@@ -908,14 +1044,16 @@
 
     <section class="result-card result" id="result">
 
-      <div class="result-score" id="score"></div>
+      <div class="score-row">
+        <div class="result-score" id="score"></div>
+        <button class="score-info-btn" id="scoreInfoBtn" type="button" aria-label="Как читать результат">ⓘ</button>
+      </div>
 
       <h2 class="result-title" id="resultTitle"></h2>
 
       <p class="result-description" id="resultDescription"></p>
 
-
-      <div class="plan-heading">
+      <div class="plan-header">
         <h3 class="plan-title">Ваш план действий</h3>
 
         <button class="pdf-btn" id="downloadPdfBtn" type="button">
@@ -993,47 +1131,90 @@
 
     </section>
 
+    <!-- SCORE INFO MODAL -->
+
+    <div class="score-info-overlay" id="scoreInfoOverlay">
+      <div class="score-info-modal" role="dialog" aria-modal="true" aria-labelledby="scoreInfoTitle">
+
+        <button class="score-info-close" id="scoreInfoClose" type="button" aria-label="Закрыть">
+          ×
+        </button>
+
+        <h3 id="scoreInfoTitle">Как читать результат</h3>
+
+        <div class="score-info-item">
+          <strong>20–24 · Фундамент готов</strong>
+          <p>
+            Базовая маркетинговая конструкция выглядит хорошо.
+            Можно сфокусироваться на эффективности каналов,
+            масштабировании и поиске новых точек роста.
+          </p>
+        </div>
+
+        <div class="score-info-item">
+          <strong>13–19 · Есть точки роста</strong>
+          <p>
+            Основа уже есть, но отдельные элементы можно улучшить,
+            чтобы повысить эффективность рекламы. Сначала займитесь
+            наиболее важными точками роста, затем масштабируйте продвижение.
+          </p>
+        </div>
+
+        <div class="score-info-item">
+          <strong>0–12 · Стоит укрепить фундамент</strong>
+          <p>
+            Есть несколько важных элементов, которые стоит доработать
+            в продукте, оффере или на посадочной странице. После этого
+            продвижение будет проще масштабировать и оценивать его эффективность.
+          </p>
+        </div>
+
+        <p class="score-info-note">
+          Результат отражает состояние базовой маркетинговой конструкции
+          по 12 вопросам и не является оценкой всего маркетинга бизнеса.
+        </p>
+
+      </div>
+    </div>
+
   </main>
 
 
-  <!-- HIDDEN PDF REPORT -->
+  <!-- PDF REPORT -->
 
-  <div id="pdfReport">
+  <div class="pdf-report" id="pdfReport">
 
-    <div class="pdf-header">
+    <div class="pdf-report-header">
+      <div class="pdf-report-label">Самоаудит маркетинга</div>
 
-      <div class="pdf-label">
-        Самоаудит маркетинга
-      </div>
+      <h1>Результат самоаудита</h1>
 
-      <h1>
-        Почему реклама не работает<br>
-        и как это исправить
-      </h1>
+      <div class="pdf-report-date" id="pdfReportDate"></div>
+    </div>
 
-      <div class="pdf-score" id="pdfScore"></div>
+    <div class="pdf-report-score">
 
-      <h2 class="pdf-result-title" id="pdfResultTitle"></h2>
+      <div class="pdf-report-score-value" id="pdfScore"></div>
 
-      <p class="pdf-result-description" id="pdfResultDescription"></p>
+      <div class="pdf-report-score-title" id="pdfResultTitle"></div>
+
+      <div class="pdf-report-score-description" id="pdfResultDescription"></div>
 
     </div>
 
-
-    <h2 class="pdf-section-title">
+    <h2 class="pdf-report-plan-title">
       Ваш план действий
     </h2>
 
-    <p class="pdf-section-intro">
+    <p class="pdf-report-plan-intro">
       Сначала исправьте проблемы высокого приоритета.
       Затем переходите к улучшениям среднего приоритета.
     </p>
 
     <div id="pdfRecommendations"></div>
 
-
-    <div class="pdf-footer">
-      Самоаудит маркетинга — простой инструмент от Никиты Кравченко.
+    <div class="pdf-report-footer">
+      Самоаудит маркетинга — простой инструмент от Никиты Кравченко
     </div>
 
   </div>
@@ -1042,6 +1223,10 @@
   <footer class="footer">
     © 2026 Создал <a href="https://t.me/+b4WeiE1SYrs1MjUy" target="_blank" rel="noopener noreferrer">Никита Кравченко</a>. Все права защищены.
   </footer>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 
   <script>
@@ -1395,6 +1580,10 @@
     const nextBtn = document.getElementById("nextBtn");
 
     const scoreElement = document.getElementById("score");
+    const scoreInfoBtn = document.getElementById("scoreInfoBtn");
+    const scoreInfoOverlay = document.getElementById("scoreInfoOverlay");
+    const scoreInfoClose = document.getElementById("scoreInfoClose");
+
     const resultTitle = document.getElementById("resultTitle");
     const resultDescription = document.getElementById("resultDescription");
     const recommendationsElement = document.getElementById("recommendations");
@@ -1423,6 +1612,35 @@
     const pdfResultTitle = document.getElementById("pdfResultTitle");
     const pdfResultDescription = document.getElementById("pdfResultDescription");
     const pdfRecommendations = document.getElementById("pdfRecommendations");
+    const pdfReportDate = document.getElementById("pdfReportDate");
+
+
+    /* =========================
+       SCORE INFO
+    ========================= */
+
+    scoreInfoBtn.addEventListener("click", () => {
+      scoreInfoOverlay.classList.add("show");
+    });
+
+    scoreInfoClose.addEventListener("click", () => {
+      scoreInfoOverlay.classList.remove("show");
+    });
+
+    scoreInfoOverlay.addEventListener("click", (event) => {
+      if (event.target === scoreInfoOverlay) {
+        scoreInfoOverlay.classList.remove("show");
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (
+        event.key === "Escape" &&
+        scoreInfoOverlay.classList.contains("show")
+      ) {
+        scoreInfoOverlay.classList.remove("show");
+      }
+    });
 
 
     /* =========================
@@ -1561,7 +1779,10 @@
       quiz.classList.add("hidden");
       milestone.classList.add("show");
 
-      milestoneIcon.textContent = "✓";
+      milestoneIcon.textContent =
+        stageIndex === stages.length - 1
+          ? "✓"
+          : "✓";
 
       milestoneTitle.textContent =
         stage.title;
@@ -1647,6 +1868,11 @@
       const currentStage =
         stages[currentStageIndex];
 
+      /*
+        Если это последний вопрос текущего этапа,
+        показываем промежуточный экран.
+      */
+
       if (currentQuestion === currentStage.end) {
 
         showMilestone(currentStageIndex);
@@ -1696,7 +1922,7 @@
        RESULT
     ========================= */
 
-    function getTotalScore() {
+    function showResult() {
 
       let totalScore = 0;
 
@@ -1711,14 +1937,6 @@
 
       });
 
-      return totalScore;
-
-    }
-
-
-    function showResult() {
-
-      const totalScore = getTotalScore();
 
       scoreElement.textContent =
         `${totalScore} / 24`;
@@ -1769,7 +1987,7 @@
        RECOMMENDATIONS
     ========================= */
 
-    function getRecommendations() {
+    function renderRecommendations() {
 
       const recommendations = [];
 
@@ -1809,15 +2027,6 @@
         return 0;
 
       });
-
-      return recommendations;
-
-    }
-
-
-    function renderRecommendations() {
-
-      const recommendations = getRecommendations();
 
 
       if (recommendations.length === 0) {
@@ -1868,10 +2077,8 @@
 
     function preparePdfReport() {
 
-      const totalScore = getTotalScore();
-
       pdfScore.textContent =
-        `${totalScore} / 24`;
+        scoreElement.textContent;
 
       pdfResultTitle.textContent =
         resultTitle.textContent;
@@ -1879,121 +2086,111 @@
       pdfResultDescription.textContent =
         resultDescription.textContent;
 
+      const now = new Date();
 
-      const recommendations = getRecommendations();
+      pdfReportDate.textContent =
+        `Дата: ${now.toLocaleDateString("ru-RU")}`;
 
+      const cards =
+        recommendationsElement.querySelectorAll(".recommendation-card");
 
-      if (recommendations.length === 0) {
+      if (!cards.length) {
 
         pdfRecommendations.innerHTML = `
-          <div class="pdf-recommendation">
-            <div class="pdf-recommendation-top">
-              <h3>Отличный результат</h3>
-            </div>
-            <p>
-              По вашим ответам критических слабых мест не обнаружено.
-              Можно переходить к работе с маркетинговым миксом:
-              тестированию каналов, перераспределению бюджета
-              и поиску новых точек роста.
-            </p>
+          <div class="pdf-report-empty">
+            По вашим ответам критических слабых мест не обнаружено.
+            Можно переходить к работе с маркетинговым миксом:
+            тестированию каналов, перераспределению бюджета
+            и поиску новых точек роста.
           </div>
         `;
 
         return;
       }
 
-
       pdfRecommendations.innerHTML =
-        recommendations.map(item => `
+        Array.from(cards).map(card => {
 
-          <div class="pdf-recommendation ${item.priority}">
+          const priority =
+            card.querySelector(".priority");
 
-            <div class="pdf-recommendation-top">
+          const title =
+            card.querySelector("h4");
 
-              <span class="pdf-priority ${item.priority}">
-                ${item.priorityLabel}
-              </span>
+          const text =
+            card.querySelector("p");
 
-              <h3>${item.title}</h3>
+          if (!priority || !title || !text) {
+            return "";
+          }
+
+          const priorityClass =
+            card.classList.contains("high")
+              ? "high"
+              : "medium";
+
+          return `
+            <div class="pdf-report-recommendation ${priorityClass}">
+
+              <div class="pdf-report-recommendation-top">
+
+                <span class="pdf-report-priority ${priorityClass}">
+                  ${priority.textContent.trim()}
+                </span>
+
+                <h3>${title.textContent.trim()}</h3>
+
+              </div>
+
+              <p>${text.textContent.trim()}</p>
 
             </div>
+          `;
 
-            <p>${item.text}</p>
-
-          </div>
-
-        `).join("");
+        }).join("");
 
     }
 
 
-    async function downloadPDF() {
+    async function downloadPdf() {
 
       if (
         typeof html2canvas === "undefined" ||
         typeof window.jspdf === "undefined"
       ) {
+
         alert(
           "Не удалось загрузить модуль создания PDF. Проверьте подключение к интернету и попробуйте ещё раз."
         );
+
         return;
       }
 
-
-      const originalText =
-        downloadPdfBtn.textContent;
-
       downloadPdfBtn.disabled = true;
-      downloadPdfBtn.textContent =
-        "Подготовка PDF…";
-
+      downloadPdfBtn.textContent = "Подготовка PDF…";
 
       try {
 
         preparePdfReport();
 
-        /*
-          Показываем скрытый отчёт на время
-          создания изображения.
-        */
-
-        pdfReport.style.position = "absolute";
-        pdfReport.style.left = "0";
-        pdfReport.style.top = "0";
-        pdfReport.style.zIndex = "9999";
-
-
-        await new Promise(resolve =>
-          requestAnimationFrame(resolve)
-        );
-
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         const canvas = await html2canvas(pdfReport, {
           scale: 2,
-          useCORS: true,
           backgroundColor: "#ffffff",
+          useCORS: true,
           logging: false
         });
-
-
-        pdfReport.style.position = "fixed";
-        pdfReport.style.left = "-10000px";
-        pdfReport.style.top = "0";
-        pdfReport.style.zIndex = "-1";
-
 
         const {
           jsPDF
         } = window.jspdf;
 
-
         const pdf = new jsPDF({
           orientation: "portrait",
           unit: "mm",
-          format: "a4",
-          compress: true
+          format: "a4"
         });
-
 
         const pageWidth = 210;
         const pageHeight = 297;
@@ -2007,154 +2204,104 @@
           usableWidth;
 
         const imageHeight =
-          canvas.height *
-          imageWidth /
-          canvas.width;
+          canvas.height * imageWidth / canvas.width;
 
-        const usablePageHeight =
+        const pageContentHeight =
           pageHeight - margin * 2;
 
+        let renderedHeight = 0;
+        let pageIndex = 0;
 
-        if (imageHeight <= usablePageHeight) {
+        while (renderedHeight < imageHeight) {
+
+          if (pageIndex > 0) {
+            pdf.addPage();
+          }
+
+          const remainingHeight =
+            imageHeight - renderedHeight;
+
+          const currentHeight =
+            Math.min(
+              pageContentHeight,
+              remainingHeight
+            );
+
+          const sourceY =
+            renderedHeight * canvas.width / imageWidth;
+
+          const sourceHeight =
+            currentHeight * canvas.width / imageWidth;
+
+          const pageCanvas =
+            document.createElement("canvas");
+
+          pageCanvas.width =
+            canvas.width;
+
+          pageCanvas.height =
+            Math.min(
+              Math.ceil(sourceHeight),
+              canvas.height - Math.floor(sourceY)
+            );
+
+          const pageContext =
+            pageCanvas.getContext("2d");
+
+          pageContext.drawImage(
+            canvas,
+            0,
+            Math.floor(sourceY),
+            canvas.width,
+            pageCanvas.height,
+            0,
+            0,
+            pageCanvas.width,
+            pageCanvas.height
+          );
+
+          const pageImage =
+            pageCanvas.toDataURL(
+              "image/jpeg",
+              0.95
+            );
+
+          const pageImageHeight =
+            pageCanvas.height * imageWidth / pageCanvas.width;
 
           pdf.addImage(
-            canvas.toDataURL("image/jpeg", 0.95),
+            pageImage,
             "JPEG",
             margin,
             margin,
             imageWidth,
-            imageHeight
+            pageImageHeight
           );
 
-        } else {
+          renderedHeight +=
+            currentHeight;
 
-          /*
-            Разбиваем длинный отчёт на страницы.
-          */
-
-          const pagePixelHeight =
-            Math.floor(
-              canvas.width *
-              usablePageHeight /
-              usableWidth
-            );
-
-
-          let renderedHeight = 0;
-          let pageNumber = 0;
-
-
-          while (
-            renderedHeight < canvas.height
-          ) {
-
-            const sliceHeight =
-              Math.min(
-                pagePixelHeight,
-                canvas.height - renderedHeight
-              );
-
-
-            const pageCanvas =
-              document.createElement("canvas");
-
-            pageCanvas.width =
-              canvas.width;
-
-            pageCanvas.height =
-              sliceHeight;
-
-
-            const context =
-              pageCanvas.getContext("2d");
-
-
-            context.fillStyle = "#ffffff";
-
-            context.fillRect(
-              0,
-              0,
-              pageCanvas.width,
-              pageCanvas.height
-            );
-
-
-            context.drawImage(
-              canvas,
-              0,
-              renderedHeight,
-              canvas.width,
-              sliceHeight,
-              0,
-              0,
-              canvas.width,
-              sliceHeight
-            );
-
-
-            const pageImage =
-              pageCanvas.toDataURL(
-                "image/jpeg",
-                0.95
-              );
-
-
-            if (pageNumber > 0) {
-              pdf.addPage();
-            }
-
-
-            const sliceHeightMm =
-              sliceHeight *
-              usableWidth /
-              canvas.width;
-
-
-            pdf.addImage(
-              pageImage,
-              "JPEG",
-              margin,
-              margin,
-              imageWidth,
-              sliceHeightMm
-            );
-
-
-            renderedHeight += sliceHeight;
-            pageNumber++;
-
-          }
-
+          pageIndex++;
         }
 
-
-        const filename =
-          `marketing-audit-${new Date()
-            .toISOString()
-            .slice(0, 10)}.pdf`;
-
-
-        pdf.save(filename);
-
+        pdf.save(
+          "rezultat-samoaudita-marketinga.pdf"
+        );
 
       } catch (error) {
 
         console.error(error);
 
         alert(
-          "Не удалось сформировать PDF. Попробуйте ещё раз."
+          "Не удалось создать PDF. Попробуйте ещё раз."
         );
-
-
-        pdfReport.style.position = "fixed";
-        pdfReport.style.left = "-10000px";
-        pdfReport.style.top = "0";
-        pdfReport.style.zIndex = "-1";
 
       } finally {
 
         downloadPdfBtn.disabled = false;
-        downloadPdfBtn.textContent = originalText;
+
+        downloadPdfBtn.textContent =
+          "↓ Скачать результат в PDF";
 
       }
 
@@ -2163,7 +2310,7 @@
 
     downloadPdfBtn.addEventListener(
       "click",
-      downloadPDF
+      downloadPdf
     );
 
 
@@ -2275,7 +2422,7 @@ ${siteUrl}
 ${region}
 
 
-РЕЗУЛЬТАТ САМОАУДИТА
+РЕЗУЛЬТАТ САМООАУДИТА
 
 ${resultText}
 
