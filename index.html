@@ -350,12 +350,128 @@
       display: none;
     }
 
+    .score-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
     .result-score {
       font-size: 64px;
       line-height: 1;
       font-weight: 800;
       letter-spacing: -2px;
-      margin-bottom: 10px;
+    }
+
+    .score-info-btn {
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #eef0f3;
+      color: #7a818c;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 24px;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .score-info-btn:hover {
+      background: #e2e5ea;
+      color: #3454d1;
+    }
+
+    .score-info-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(20, 25, 35, .45);
+      opacity: 0;
+      visibility: hidden;
+      transition: .2s ease;
+    }
+
+    .score-info-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .score-info-modal {
+      position: relative;
+      width: min(560px, 100%);
+      max-height: calc(100vh - 40px);
+      overflow-y: auto;
+      padding: 32px;
+      border-radius: 20px;
+      background: #fff;
+      box-shadow: 0 20px 60px rgba(20, 30, 50, .2);
+      transform: translateY(10px);
+      transition: .2s ease;
+    }
+
+    .score-info-overlay.show .score-info-modal {
+      transform: translateY(0);
+    }
+
+    .score-info-modal h3 {
+      margin: 0 0 24px;
+      font-size: 24px;
+      line-height: 1.2;
+    }
+
+    .score-info-item {
+      margin-bottom: 18px;
+    }
+
+    .score-info-item:last-of-type {
+      margin-bottom: 20px;
+    }
+
+    .score-info-item strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 16px;
+    }
+
+    .score-info-item p {
+      margin: 0;
+      color: #646b75;
+      font-size: 15px;
+    }
+
+    .score-info-note {
+      margin: 0;
+      padding-top: 18px;
+      border-top: 1px solid #e5e8ed;
+      color: #7a818c;
+      font-size: 13px;
+    }
+
+    .score-info-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #eef0f3;
+      color: #646b75;
+      font-size: 22px;
+      line-height: 32px;
+      cursor: pointer;
+    }
+
+    .score-info-close:hover {
+      background: #e2e5ea;
     }
 
     .result-title {
@@ -572,6 +688,10 @@
       .ai-prompt-box {
         padding: 20px;
       }
+
+      .score-info-modal {
+        padding: 26px 22px;
+      }
     }
   </style>
 </head>
@@ -721,7 +841,10 @@
 
     <section class="result-card result" id="result">
 
-      <div class="result-score" id="score"></div>
+      <div class="score-row">
+        <div class="result-score" id="score"></div>
+        <button class="score-info-btn" id="scoreInfoBtn" type="button" aria-label="Как читать результат">ⓘ</button>
+      </div>
 
       <h2 class="result-title" id="resultTitle"></h2>
 
@@ -798,6 +921,52 @@
       </div>
 
     </section>
+
+    <!-- SCORE INFO MODAL -->
+
+    <div class="score-info-overlay" id="scoreInfoOverlay">
+      <div class="score-info-modal" role="dialog" aria-modal="true" aria-labelledby="scoreInfoTitle">
+
+        <button class="score-info-close" id="scoreInfoClose" type="button" aria-label="Закрыть">
+          ×
+        </button>
+
+        <h3 id="scoreInfoTitle">Как читать результат</h3>
+
+        <div class="score-info-item">
+          <strong>20–24 · Фундамент готов</strong>
+          <p>
+            Базовая маркетинговая конструкция выглядит хорошо.
+            Можно сфокусироваться на эффективности каналов,
+            масштабировании и поиске новых точек роста.
+          </p>
+        </div>
+
+        <div class="score-info-item">
+          <strong>13–19 · Есть точки роста</strong>
+          <p>
+            Основа уже есть, но отдельные элементы можно улучшить,
+            чтобы повысить эффективность рекламы. Сначала займитесь
+            наиболее важными точками роста, затем масштабируйте продвижение.
+          </p>
+        </div>
+
+        <div class="score-info-item">
+          <strong>0–12 · Стоит укрепить фундамент</strong>
+          <p>
+            Есть несколько важных элементов, которые стоит доработать
+            в продукте, оффере или на посадочной странице. После этого
+            продвижение будет проще масштабировать и оценивать его эффективность.
+          </p>
+        </div>
+
+        <p class="score-info-note">
+          Результат отражает состояние базовой маркетинговой конструкции
+          по 12 вопросам и не является оценкой всего маркетинга бизнеса.
+        </p>
+
+      </div>
+    </div>
 
   </main>
 
@@ -1158,6 +1327,10 @@
     const nextBtn = document.getElementById("nextBtn");
 
     const scoreElement = document.getElementById("score");
+    const scoreInfoBtn = document.getElementById("scoreInfoBtn");
+    const scoreInfoOverlay = document.getElementById("scoreInfoOverlay");
+    const scoreInfoClose = document.getElementById("scoreInfoClose");
+
     const resultTitle = document.getElementById("resultTitle");
     const resultDescription = document.getElementById("resultDescription");
     const recommendationsElement = document.getElementById("recommendations");
@@ -1178,6 +1351,34 @@
     const milestoneProgressPercent = document.getElementById("milestoneProgressPercent");
     const milestoneProgressFill = document.getElementById("milestoneProgressFill");
     const milestoneBtn = document.getElementById("milestoneBtn");
+
+
+    /* =========================
+       SCORE INFO
+    ========================= */
+
+    scoreInfoBtn.addEventListener("click", () => {
+      scoreInfoOverlay.classList.add("show");
+    });
+
+    scoreInfoClose.addEventListener("click", () => {
+      scoreInfoOverlay.classList.remove("show");
+    });
+
+    scoreInfoOverlay.addEventListener("click", (event) => {
+      if (event.target === scoreInfoOverlay) {
+        scoreInfoOverlay.classList.remove("show");
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (
+        event.key === "Escape" &&
+        scoreInfoOverlay.classList.contains("show")
+      ) {
+        scoreInfoOverlay.classList.remove("show");
+      }
+    });
 
 
     /* =========================
