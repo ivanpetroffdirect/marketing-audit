@@ -55,7 +55,8 @@
     }
 
     .quiz-card,
-    .result-card {
+    .result-card,
+    .milestone-card {
       background: #fff;
       border-radius: 24px;
       padding: 32px;
@@ -63,8 +64,96 @@
       margin-bottom: 40px;
     }
 
+    /* =========================
+       PROGRESS
+    ========================= */
+
     .progress-wrap {
       margin-bottom: 28px;
+    }
+
+    .progress-stages {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .stage {
+      position: relative;
+      min-width: 0;
+    }
+
+    .stage-top {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 7px;
+    }
+
+    .stage-dot {
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #edf0f4;
+      color: #8b929c;
+      font-size: 11px;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+
+    .stage-name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #9298a1;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      transition: .2s ease;
+    }
+
+    .stage-line {
+      height: 5px;
+      background: #edf0f4;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .stage-fill {
+      height: 100%;
+      width: 0;
+      background: #3454d1;
+      border-radius: inherit;
+      transition: width .3s ease;
+    }
+
+    .stage.active .stage-dot {
+      background: #3454d1;
+      color: #fff;
+    }
+
+    .stage.active .stage-name {
+      color: #3454d1;
+    }
+
+    .stage.completed .stage-dot {
+      background: #3454d1;
+      color: #fff;
+    }
+
+    .stage.completed .stage-name {
+      color: #3454d1;
+    }
+
+    .stage.completed .stage-fill {
+      width: 100%;
     }
 
     .progress-info {
@@ -77,20 +166,13 @@
       font-weight: 600;
     }
 
-    .progress {
-      height: 7px;
-      background: #edf0f4;
-      border-radius: 999px;
-      overflow: hidden;
+    .progress-info strong {
+      color: #3454d1;
     }
 
-    .progress-bar {
-      height: 100%;
-      width: 0;
-      background: #3454d1;
-      border-radius: inherit;
-      transition: width 0.25s ease;
-    }
+    /* =========================
+       QUESTION
+    ========================= */
 
     .category {
       margin-bottom: 10px;
@@ -179,6 +261,82 @@
       opacity: .45;
       cursor: not-allowed;
     }
+
+    /* =========================
+       MILESTONE
+    ========================= */
+
+    .milestone {
+      display: none;
+    }
+
+    .milestone.show {
+      display: block;
+    }
+
+    .milestone-card {
+      text-align: center;
+      padding: 48px 32px;
+    }
+
+    .milestone-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #eef1ff;
+      color: #3454d1;
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .milestone-card h2 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.15;
+      letter-spacing: -.5px;
+    }
+
+    .milestone-card p {
+      max-width: 580px;
+      margin: 0 auto 26px;
+      color: #646b75;
+      font-size: 17px;
+    }
+
+    .milestone-progress {
+      max-width: 430px;
+      margin: 0 auto 28px;
+    }
+
+    .milestone-progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      color: #7a818c;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .milestone-progress-track {
+      height: 7px;
+      background: #edf0f4;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .milestone-progress-fill {
+      height: 100%;
+      background: #3454d1;
+      border-radius: inherit;
+    }
+
+    /* =========================
+       RESULT
+    ========================= */
 
     .result {
       display: none;
@@ -281,7 +439,9 @@
       color: #5e6570;
     }
 
-    /* AI PROMPT */
+    /* =========================
+       AI PROMPT
+    ========================= */
 
     .ai-prompt-box {
       margin-top: 32px;
@@ -355,7 +515,12 @@
       font-size: 13px;
     }
 
+    /* =========================
+       MOBILE
+    ========================= */
+
     @media (max-width: 600px) {
+
       .hero {
         padding: 42px 0 28px;
       }
@@ -366,12 +531,42 @@
         border-radius: 18px;
       }
 
+      .progress-stages {
+        gap: 5px;
+      }
+
+      .stage-top {
+        display: block;
+      }
+
+      .stage-dot {
+        margin-bottom: 5px;
+      }
+
+      .stage-name {
+        display: block;
+        font-size: 9px;
+      }
+
+      .stage-line {
+        height: 4px;
+      }
+
       .navigation {
         flex-direction: column-reverse;
       }
 
       .navigation .btn {
         width: 100%;
+      }
+
+      .milestone-card {
+        padding: 38px 22px;
+        border-radius: 18px;
+      }
+
+      .milestone-card h2 {
+        font-size: 27px;
       }
 
       .ai-prompt-box {
@@ -385,16 +580,19 @@
 
   <header class="hero">
     <div class="container">
+
       <div class="label">Самоаудит маркетинга</div>
 
       <h1>Почему реклама не работает и как это исправить</h1>
 
       <p>
-        Ответьте на 12 вопросов и получите готовый промпт для Claude, ChatGPT, Gemini 
+        Ответьте на 12 вопросов и получите готовый промпт для Claude, ChatGPT, Gemini
         или другой нейросети — для глубокого анализа вашего маркетинга и персональных рекомендаций по его улучшению.
       </p>
+
     </div>
   </header>
+
 
   <main class="container">
 
@@ -403,15 +601,60 @@
     <section class="quiz-card quiz" id="quiz">
 
       <div class="progress-wrap">
-        <div class="progress-info">
-          <span id="categoryLabel">Продукт</span>
-          <span id="questionCounter">1 / 12</span>
+
+        <div class="progress-stages">
+
+          <div class="stage" id="stage-0">
+            <div class="stage-top">
+              <div class="stage-dot">1</div>
+              <div class="stage-name">Продукт</div>
+            </div>
+            <div class="stage-line">
+              <div class="stage-fill" id="stage-fill-0"></div>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-1">
+            <div class="stage-top">
+              <div class="stage-dot">2</div>
+              <div class="stage-name">Оффер</div>
+            </div>
+            <div class="stage-line">
+              <div class="stage-fill" id="stage-fill-1"></div>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-2">
+            <div class="stage-top">
+              <div class="stage-dot">3</div>
+              <div class="stage-name">Посадочная</div>
+            </div>
+            <div class="stage-line">
+              <div class="stage-fill" id="stage-fill-2"></div>
+            </div>
+          </div>
+
+          <div class="stage" id="stage-3">
+            <div class="stage-top">
+              <div class="stage-dot">4</div>
+              <div class="stage-name">Маркетинг</div>
+            </div>
+            <div class="stage-line">
+              <div class="stage-fill" id="stage-fill-3"></div>
+            </div>
+          </div>
+
         </div>
 
-        <div class="progress">
-          <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-info">
+          <span id="categoryLabel">Продукт</span>
+          <span>
+            Вопрос <strong id="questionCounter">1 из 12</strong>
+          </span>
         </div>
+
       </div>
+
 
       <div class="category" id="category"></div>
 
@@ -419,7 +662,9 @@
 
       <div class="answers" id="answers"></div>
 
+
       <div class="navigation">
+
         <button class="btn btn-secondary" id="backBtn">
           ← Назад
         </button>
@@ -427,6 +672,46 @@
         <button class="btn btn-primary" id="nextBtn" disabled>
           Далее →
         </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- MILESTONE -->
+
+    <section class="milestone" id="milestone">
+
+      <div class="milestone-card">
+
+        <div class="milestone-icon" id="milestoneIcon">
+          ✓
+        </div>
+
+        <h2 id="milestoneTitle"></h2>
+
+        <p id="milestoneText"></p>
+
+        <div class="milestone-progress">
+
+          <div class="milestone-progress-label">
+            <span id="milestoneProgressText"></span>
+            <span id="milestoneProgressPercent"></span>
+          </div>
+
+          <div class="milestone-progress-track">
+            <div
+              class="milestone-progress-fill"
+              id="milestoneProgressFill"
+            ></div>
+          </div>
+
+        </div>
+
+        <button class="btn btn-primary" id="milestoneBtn">
+          Продолжить →
+        </button>
+
       </div>
 
     </section>
@@ -810,11 +1095,48 @@
 
 
     /* =========================
+       STAGES
+    ========================= */
+
+    const stages = [
+      {
+        name: "Продукт",
+        start: 0,
+        end: 2,
+        title: "Первый этап пройден",
+        text: "Вы проверили фундамент: проблему клиента, целевую аудиторию и отличие продукта. Теперь посмотрим, насколько хорошо эта ценность упакована в оффер."
+      },
+      {
+        name: "Оффер",
+        start: 3,
+        end: 5,
+        title: "Половина основы уже проверена",
+        text: "Вы разобрались с продуктом и оффером. Теперь проверим, насколько хорошо посадочная страница превращает интерес пользователя в действие."
+      },
+      {
+        name: "Посадочная",
+        start: 6,
+        end: 9,
+        title: "Почти готово",
+        text: "Вы проверили продукт, оффер и посадочную страницу. Остался последний этап — понять, насколько эффективно работает ваш маркетинг и что ограничивает рост."
+      },
+      {
+        name: "Маркетинг",
+        start: 10,
+        end: 11,
+        title: "Самоаудит завершён",
+        text: "Все 12 вопросов позади. Теперь соберём ваши ответы в итоговую оценку и покажем основные точки роста."
+      }
+    ];
+
+
+    /* =========================
        STATE
     ========================= */
 
     let currentQuestion = 0;
     let selectedAnswers = new Array(questions.length).fill(null);
+    let pendingMilestone = null;
 
 
     /* =========================
@@ -823,6 +1145,7 @@
 
     const quiz = document.getElementById("quiz");
     const result = document.getElementById("result");
+    const milestone = document.getElementById("milestone");
 
     const category = document.getElementById("category");
     const categoryLabel = document.getElementById("categoryLabel");
@@ -830,7 +1153,6 @@
     const answers = document.getElementById("answers");
 
     const questionCounter = document.getElementById("questionCounter");
-    const progressBar = document.getElementById("progressBar");
 
     const backBtn = document.getElementById("backBtn");
     const nextBtn = document.getElementById("nextBtn");
@@ -849,6 +1171,76 @@
     const siteUrlInput = document.getElementById("siteUrl");
     const regionInput = document.getElementById("region");
 
+    const milestoneIcon = document.getElementById("milestoneIcon");
+    const milestoneTitle = document.getElementById("milestoneTitle");
+    const milestoneText = document.getElementById("milestoneText");
+    const milestoneProgressText = document.getElementById("milestoneProgressText");
+    const milestoneProgressPercent = document.getElementById("milestoneProgressPercent");
+    const milestoneProgressFill = document.getElementById("milestoneProgressFill");
+    const milestoneBtn = document.getElementById("milestoneBtn");
+
+
+    /* =========================
+       GET CURRENT STAGE
+    ========================= */
+
+    function getStageIndex(questionIndex) {
+
+      return stages.findIndex(stage =>
+        questionIndex >= stage.start &&
+        questionIndex <= stage.end
+      );
+
+    }
+
+
+    /* =========================
+       UPDATE PROGRESS
+    ========================= */
+
+    function updateProgress() {
+
+      const currentStageIndex = getStageIndex(currentQuestion);
+
+      stages.forEach((stage, index) => {
+
+        const stageElement =
+          document.getElementById(`stage-${index}`);
+
+        const fillElement =
+          document.getElementById(`stage-fill-${index}`);
+
+        stageElement.classList.remove("active", "completed");
+
+        if (index < currentStageIndex) {
+
+          stageElement.classList.add("completed");
+
+          fillElement.style.width = "100%";
+
+        } else if (index === currentStageIndex) {
+
+          stageElement.classList.add("active");
+
+          const stageLength =
+            stage.end - stage.start + 1;
+
+          const position =
+            currentQuestion - stage.start + 1;
+
+          fillElement.style.width =
+            `${(position / stageLength) * 100}%`;
+
+        } else {
+
+          fillElement.style.width = "0%";
+
+        }
+
+      });
+
+    }
+
 
     /* =========================
        RENDER QUESTION
@@ -864,10 +1256,9 @@
       question.textContent = item.question;
 
       questionCounter.textContent =
-        `${currentQuestion + 1} / ${questions.length}`;
+        `${currentQuestion + 1} из ${questions.length}`;
 
-      progressBar.style.width =
-        `${((currentQuestion + 1) / questions.length) * 100}%`;
+      updateProgress();
 
       answers.innerHTML = "";
 
@@ -913,12 +1304,116 @@
 
 
     /* =========================
+       SHOW MILESTONE
+    ========================= */
+
+    function showMilestone(stageIndex) {
+
+      const stage = stages[stageIndex];
+
+      pendingMilestone = stageIndex;
+
+      quiz.classList.add("hidden");
+      milestone.classList.add("show");
+
+      milestoneIcon.textContent =
+        stageIndex === stages.length - 1
+          ? "✓"
+          : "✓";
+
+      milestoneTitle.textContent =
+        stage.title;
+
+      milestoneText.textContent =
+        stage.text;
+
+      const completedQuestions =
+        stage.end + 1;
+
+      const percentage =
+        Math.round(
+          (completedQuestions / questions.length) * 100
+        );
+
+      milestoneProgressText.textContent =
+        `${completedQuestions} из ${questions.length} вопросов`;
+
+      milestoneProgressPercent.textContent =
+        `${percentage}%`;
+
+      milestoneProgressFill.style.width =
+        `${percentage}%`;
+
+      milestoneBtn.textContent =
+        stageIndex === stages.length - 1
+          ? "Посмотреть результат →"
+          : "Продолжить →";
+
+      window.scrollTo({
+        top: milestone.offsetTop - 30,
+        behavior: "smooth"
+      });
+
+    }
+
+
+    /* =========================
+       CONTINUE FROM MILESTONE
+    ========================= */
+
+    milestoneBtn.addEventListener("click", () => {
+
+      milestone.classList.remove("show");
+
+      if (pendingMilestone === stages.length - 1) {
+
+        showResult();
+
+        return;
+      }
+
+      const nextQuestion =
+        stages[pendingMilestone].end + 1;
+
+      currentQuestion = nextQuestion;
+
+      quiz.classList.remove("hidden");
+
+      renderQuestion();
+
+      window.scrollTo({
+        top: quiz.offsetTop - 30,
+        behavior: "smooth"
+      });
+
+    });
+
+
+    /* =========================
        NEXT
     ========================= */
 
     nextBtn.addEventListener("click", () => {
 
       if (selectedAnswers[currentQuestion] === null) {
+        return;
+      }
+
+      const currentStageIndex =
+        getStageIndex(currentQuestion);
+
+      const currentStage =
+        stages[currentStageIndex];
+
+      /*
+        Если это последний вопрос текущего этапа,
+        показываем промежуточный экран.
+      */
+
+      if (currentQuestion === currentStage.end) {
+
+        showMilestone(currentStageIndex);
+
         return;
       }
 
@@ -932,10 +1427,6 @@
           top: quiz.offsetTop - 30,
           behavior: "smooth"
         });
-
-      } else {
-
-        showResult();
 
       }
 
@@ -983,8 +1474,10 @@
 
       });
 
+
       scoreElement.textContent =
         `${totalScore} / 24`;
+
 
       if (totalScore >= 20) {
 
@@ -1016,6 +1509,7 @@
       renderRecommendations();
 
       quiz.classList.add("hidden");
+      milestone.classList.remove("show");
       result.classList.add("show");
 
       window.scrollTo({
@@ -1557,10 +2051,6 @@ CTA
 
       } catch (error) {
 
-        /*
-          Запасной вариант для старых браузеров
-        */
-
         const textarea =
           document.createElement("textarea");
 
@@ -1617,7 +2107,10 @@ CTA
       selectedAnswers =
         new Array(questions.length).fill(null);
 
+      pendingMilestone = null;
+
       result.classList.remove("show");
+      milestone.classList.remove("show");
       quiz.classList.remove("hidden");
 
       copySuccess.classList.remove("show");
