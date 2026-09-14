@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Самоаудит маркетинга</title>
+
+  <title>Самоаудит маркетинг-микса</title>
 
   <style>
     * {
@@ -50,7 +51,7 @@
     }
 
     .hero p {
-      max-width: 600px;
+      max-width: 620px;
       margin: 0 auto;
       color: #686e76;
       font-size: 18px;
@@ -63,8 +64,10 @@
       border-radius: 24px;
       padding: 32px;
       margin-bottom: 50px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.06);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .06);
     }
+
+    /* PROGRESS */
 
     .progress-wrap {
       margin-bottom: 32px;
@@ -91,6 +94,8 @@
       background: #111;
       transition: width .3s ease;
     }
+
+    /* QUESTION */
 
     .question-number {
       font-size: 14px;
@@ -134,6 +139,8 @@
       color: #fff;
     }
 
+    /* NAVIGATION */
+
     .navigation {
       display: flex;
       justify-content: space-between;
@@ -174,7 +181,11 @@
 
     .result {
       display: none;
+    }
+
+    .result-header {
       text-align: center;
+      margin-bottom: 32px;
     }
 
     .result-score {
@@ -192,27 +203,78 @@
     }
 
     .result-description {
-      max-width: 560px;
-      margin: 0 auto 30px;
+      max-width: 580px;
+      margin: 0 auto;
       color: #666d75;
       font-size: 17px;
     }
 
-    .result-box {
-      text-align: left;
-      background: #f5f6f8;
-      border-radius: 18px;
-      padding: 24px;
-      margin-bottom: 24px;
+    /* RECOMMENDATIONS */
+
+    .recommendations-title {
+      font-size: 21px;
+      margin: 0 0 8px;
     }
 
-    .result-box strong {
-      display: block;
-      margin-bottom: 8px;
+    .result-intro {
+      color: #666d75;
+      font-size: 15px;
+      margin: 0 0 20px;
+    }
+
+    .recommendations {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .recommendation {
+      background: #f5f6f8;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .priority {
+      display: inline-block;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .priority-high {
+      background: #ffe5e5;
+      color: #b42318;
+    }
+
+    .priority-medium {
+      background: #fff0d6;
+      color: #9a5b00;
+    }
+
+    .recommendation-title {
       font-size: 17px;
+      font-weight: 750;
+      margin-bottom: 7px;
+    }
+
+    .recommendation-text {
+      color: #5f666e;
+      font-size: 15px;
+    }
+
+    .no-recommendations {
+      background: #f5f6f8;
+      border-radius: 16px;
+      padding: 22px;
+      color: #555c64;
+      margin-bottom: 28px;
     }
 
     .restart {
+      display: block;
+      margin: 0 auto;
       background: #111;
       color: #fff;
       border: 0;
@@ -232,7 +294,10 @@
       font-size: 13px;
     }
 
+    /* MOBILE */
+
     @media (max-width: 600px) {
+
       .hero {
         padding-top: 40px;
       }
@@ -249,62 +314,118 @@
       .hero p {
         font-size: 16px;
       }
+
+      .result-score {
+        font-size: 52px;
+      }
+
+      .result-title {
+        font-size: 24px;
+      }
+
     }
+
   </style>
 </head>
 
+
 <body>
 
+
+  <!-- HERO -->
+
   <header class="hero">
+
     <div class="container">
-      <div class="label">Самоаудит маркетинга</div>
+
+      <div class="label">
+        Самоаудит маркетинга
+      </div>
 
       <h1>
-        Готов ли ваш маркетинг к масштабированию?
+        Разбираемся, почему реклама не работает и как это исправить
       </h1>
 
       <p>
-        Ответьте на 12 вопросов и проверьте,
-        насколько ваш продукт, оффер и посадочная готовы
-        к привлечению большего объёма трафика.
+        Ответьте на 12 вопросов и получите рекомендации
+        по продукту, офферу, посадочной странице и маркетинговым каналам.
       </p>
+
     </div>
+
   </header>
 
+
+  <!-- MAIN -->
 
   <main class="container">
 
     <section class="audit">
 
-      <!-- QUESTIONS -->
+
+      <!-- QUIZ -->
 
       <div id="quiz">
 
         <div class="progress-wrap">
+
           <div class="progress-top">
-            <span id="progressText">Вопрос 1 из 12</span>
-            <span id="percent">0%</span>
+
+            <span id="progressText">
+              Вопрос 1 из 12
+            </span>
+
+            <span id="percent">
+              0%
+            </span>
+
           </div>
 
           <div class="progress">
-            <div class="progress-bar" id="progressBar"></div>
+
+            <div
+              class="progress-bar"
+              id="progressBar">
+            </div>
+
           </div>
+
         </div>
 
-        <div class="question-number" id="category"></div>
 
-        <div class="question" id="question"></div>
+        <div
+          class="question-number"
+          id="category">
+        </div>
 
-        <div class="answers" id="answers"></div>
+
+        <div
+          class="question"
+          id="question">
+        </div>
+
+
+        <div
+          class="answers"
+          id="answers">
+        </div>
+
 
         <div class="navigation">
-          <button class="nav-btn prev" id="prevBtn">
+
+          <button
+            class="nav-btn prev"
+            id="prevBtn">
             Назад
           </button>
 
-          <button class="nav-btn next" id="nextBtn" disabled>
+          <button
+            class="nav-btn next"
+            id="nextBtn"
+            disabled>
             Далее
           </button>
+
         </div>
 
       </div>
@@ -312,26 +433,60 @@
 
       <!-- RESULT -->
 
-      <div class="result" id="result">
+      <div
+        class="result"
+        id="result">
 
-        <div class="label">Результат аудита</div>
 
-        <div class="result-score" id="score"></div>
+        <div class="result-header">
 
-        <div class="result-title" id="resultTitle"></div>
+          <div class="label">
+            Результат аудита
+          </div>
 
-        <div class="result-description" id="resultDescription"></div>
+          <div
+            class="result-score"
+            id="score">
+          </div>
 
-        <div class="result-box">
-          <strong>Что стоит сделать в первую очередь</strong>
-          <div id="resultAdvice"></div>
+          <div
+            class="result-title"
+            id="resultTitle">
+          </div>
+
+          <div
+            class="result-description"
+            id="resultDescription">
+          </div>
+
         </div>
 
-        <button class="restart" onclick="restartQuiz()">
+
+        <h2 class="recommendations-title">
+          Ваш план действий
+        </h2>
+
+        <div class="result-intro">
+          Сначала исправьте проблемы высокого приоритета.
+          Затем переходите к улучшениям среднего приоритета.
+        </div>
+
+
+        <div
+          class="recommendations"
+          id="recommendations">
+        </div>
+
+
+        <button
+          class="restart"
+          onclick="restartQuiz()">
           Пройти ещё раз
         </button>
 
+
       </div>
+
 
     </section>
 
@@ -339,197 +494,384 @@
 
 
   <footer>
+
     Самоаудит продукта, оффера и посадочной страницы
+
   </footer>
 
 
 <script>
 
+
+/* =========================================================
+   ВОПРОСЫ
+========================================================= */
+
+
 const questions = [
 
   {
     category: "Продукт",
+
     text: "Понятно ли, какую конкретную проблему клиента решает ваш продукт?",
+
     answers: [
       ["Да, это можно объяснить одним предложением", 2],
       ["В целом понятно, но формулировка сложная", 1],
       ["Нет чёткого ответа", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Сделайте ценность продукта понятнее",
+
+      text: "Сформулируйте одним предложением, какую конкретную проблему клиента решает продукт и какой результат он получает. Проверьте формулировку на человеке, который не знаком с вашим бизнесом: если ему приходится задавать уточняющие вопросы — предложение стоит упростить."
+    }
   },
+
 
   {
     category: "Продукт",
+
     text: "Понимаете ли вы, кто ваш основной клиент?",
+
     answers: [
       ["Да, есть чёткий портрет и конкретный сегмент", 2],
       ["Есть несколько предполагаемых сегментов", 1],
       ["Продаём практически всем", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Сфокусируйтесь на приоритетной аудитории",
+
+      text: "Выберите 1–2 сегмента, для которых проблема особенно актуальна и которые обладают достаточным потенциалом. Для каждого сегмента отдельно сформулируйте потребность, мотивацию к покупке и основные возражения."
+    }
   },
+
 
   {
     category: "Продукт",
+
     text: "Можете ли вы объяснить, почему клиент должен выбрать вас, а не альтернативу?",
+
     answers: [
       ["Да, есть понятное преимущество", 2],
       ["Есть преимущества, но они не очень конкретные", 1],
       ["Сложно назвать существенное отличие", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Сформулируйте отличие от альтернатив",
+
+      text: "Определите 1–2 причины, по которым клиенту стоит выбрать именно ваш продукт. Важно, чтобы это было не просто внутреннее преимущество компании, а фактор, который действительно важен клиенту и влияет на его решение."
+    }
   },
+
 
   {
     category: "Оффер",
+
     text: "Может ли пользователь за несколько секунд понять, что именно ему предлагают?",
+
     answers: [
       ["Да, предложение очевидно с первого экрана", 2],
       ["Нужно немного разобраться", 1],
       ["Предложение становится понятно только после изучения страницы", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Упростите оффер на первом экране",
+
+      text: "На первом экране должно быть сразу понятно: что вы предлагаете, кому это нужно и какую задачу решает продукт. Уберите всё второстепенное из первого экрана и проверьте его на человеке, который впервые видит ваш сайт."
+    }
   },
+
 
   {
     category: "Оффер",
+
     text: "Сформулирована ли конкретная выгода для клиента?",
+
     answers: [
       ["Да, понятно, что получит клиент", 2],
       ["Есть выгоды, но они довольно общие", 1],
       ["В основном рассказываем о характеристиках продукта", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Переведите характеристики в выгоды",
+
+      text: "Посмотрите на основные характеристики продукта и задайте вопрос: «Что это даёт клиенту?». Например, вместо «автоматизация отчётности» — «сокращает подготовку отчёта с 4 часов до 20 минут». Чем конкретнее выгода, тем проще её использовать в рекламе."
+    }
   },
+
 
   {
     category: "Оффер",
+
     text: "Есть ли у клиента причина воспользоваться предложением сейчас?",
+
     answers: [
       ["Да, есть понятный повод действовать сейчас", 2],
       ["Есть некоторые стимулы, но они слабые", 1],
       ["Особой причины торопиться нет", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Добавьте причину действовать сейчас",
+
+      text: "Подумайте, почему клиенту стоит принять решение сейчас, а не отложить его. Это может быть ограниченное предложение, бонус, изменение цены, сезонность, бесплатная консультация или другой реальный стимул. Не создавайте искусственный дефицит, если его нет."
+    }
   },
+
 
   {
     category: "Посадочная",
+
     text: "Совпадает ли сообщение на посадочной странице с обещанием в рекламе?",
+
     answers: [
       ["Да, пользователь сразу понимает, что попал туда, куда ожидал", 2],
       ["В целом совпадает, но формулировки отличаются", 1],
       ["Связь между рекламой и страницей слабая", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Синхронизируйте рекламу и посадочную",
+
+      text: "Пользователь должен сразу увидеть продолжение того обещания, на которое он кликнул. Если в рекламе предлагается конкретный продукт, цена, решение или выгода — это должно быть очевидно и на посадочной странице."
+    }
   },
+
 
   {
     category: "Посадочная",
+
     text: "Есть ли на странице доказательства того, что продукт действительно работает?",
+
     answers: [
       ["Да: кейсы, цифры, отзывы или другие доказательства", 2],
       ["Есть отзывы или отдельные элементы доверия", 1],
       ["В основном просим поверить нам на слово", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Добавьте доказательства",
+
+      text: "Используйте кейсы, цифры, отзывы, рейтинги, сертификаты, результаты клиентов и другие подтверждения. Особенно ценны конкретные результаты: было X → сделали Y → получили Z."
+    }
   },
+
 
   {
     category: "Посадочная",
+
     text: "Понятно ли пользователю, что делать после изучения страницы?",
+
     answers: [
       ["Да, есть одно очевидное целевое действие", 2],
       ["Есть несколько вариантов действий", 1],
       ["Пользователь должен сам догадаться, что делать", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Сделайте следующий шаг очевидным",
+
+      text: "Определите одно основное целевое действие страницы и сделайте его заметным. Формулировка кнопки должна объяснять следующий шаг: «Получить расчёт», «Записаться на консультацию», «Купить» или другое конкретное действие."
+    }
   },
+
 
   {
     category: "Посадочная",
+
     text: "Можно ли совершить целевое действие быстро и без лишних шагов?",
+
     answers: [
       ["Да, путь максимально короткий", 2],
       ["Есть несколько лишних действий", 1],
       ["Путь до заявки или покупки довольно сложный", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Сократите путь до конверсии",
+
+      text: "Пройдите путь пользователя самостоятельно от первого клика до отправки заявки или покупки. Уберите ненужные поля, страницы, регистрации и дополнительные действия. Каждый лишний шаг — потенциальная точка потери пользователя."
+    }
   },
+
 
   {
     category: "Маркетинг",
+
     text: "Понимаете ли вы, какие рекламные каналы дают вам качественных клиентов?",
+
     answers: [
       ["Да, видим не только заявки, но и дальнейший результат", 2],
       ["Видим заявки, но не всегда понимаем их качество", 1],
       ["Оцениваем каналы в основном по кликам или количеству лидов", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Оценивайте каналы не только по лидам",
+
+      text: "Свяжите рекламные источники с продажами и выручкой. Если это возможно, оценивайте стоимость привлечения клиента, выручку, маржинальность или другой показатель, который отражает реальную ценность привлечённого клиента."
+    }
   },
+
 
   {
     category: "Маркетинг",
+
     text: "Есть ли у вас понимание, что именно ограничивает рост продаж сейчас?",
+
     answers: [
       ["Да, понимаем главное ограничение", 2],
       ["Есть несколько гипотез", 1],
       ["Пока просто пытаемся увеличивать рекламу", 0]
-    ]
+    ],
+
+    recommendation: {
+      title: "Найдите главное ограничение роста",
+
+      text: "Не начинайте с вопроса «куда ещё направить рекламный бюджет?». Посмотрите на всю воронку: объём спроса, качество трафика, конверсию, средний чек, повторные продажи и экономику привлечения. Найдите участок, который сильнее всего ограничивает рост."
+    }
   }
 
 ];
 
 
+/* =========================================================
+   СОСТОЯНИЕ
+========================================================= */
+
+
 let currentQuestion = 0;
-let selectedAnswers = new Array(questions.length).fill(null);
+
+let selectedAnswers =
+  new Array(questions.length).fill(null);
 
 
-const questionEl = document.getElementById("question");
-const answersEl = document.getElementById("answers");
-const categoryEl = document.getElementById("category");
-const nextBtn = document.getElementById("nextBtn");
-const prevBtn = document.getElementById("prevBtn");
-const progressBar = document.getElementById("progressBar");
-const progressText = document.getElementById("progressText");
-const percentEl = document.getElementById("percent");
+/* =========================================================
+   ЭЛЕМЕНТЫ
+========================================================= */
+
+
+const questionEl =
+  document.getElementById("question");
+
+const answersEl =
+  document.getElementById("answers");
+
+const categoryEl =
+  document.getElementById("category");
+
+const nextBtn =
+  document.getElementById("nextBtn");
+
+const prevBtn =
+  document.getElementById("prevBtn");
+
+const progressBar =
+  document.getElementById("progressBar");
+
+const progressText =
+  document.getElementById("progressText");
+
+const percentEl =
+  document.getElementById("percent");
+
+
+/* =========================================================
+   ОТРИСОВКА ВОПРОСА
+========================================================= */
 
 
 function renderQuestion() {
 
-  const q = questions[currentQuestion];
+  const q =
+    questions[currentQuestion];
 
-  categoryEl.textContent = q.category;
 
-  questionEl.textContent = q.text;
+  categoryEl.textContent =
+    q.category;
+
+
+  questionEl.textContent =
+    q.text;
+
 
   progressText.textContent =
     `Вопрос ${currentQuestion + 1} из ${questions.length}`;
 
-  const percent =
-    Math.round((currentQuestion / questions.length) * 100);
 
-  progressBar.style.width = percent + "%";
-  percentEl.textContent = percent + "%";
+  const percent =
+    Math.round(
+      (currentQuestion / questions.length) * 100
+    );
+
+
+  progressBar.style.width =
+    percent + "%";
+
+
+  percentEl.textContent =
+    percent + "%";
+
 
   answersEl.innerHTML = "";
 
-  q.answers.forEach((answer, index) => {
 
-    const button = document.createElement("button");
+  q.answers.forEach(
+    (answer, index) => {
 
-    button.className = "answer";
-    button.textContent = answer[0];
+      const button =
+        document.createElement("button");
 
-    if (selectedAnswers[currentQuestion] === index) {
-      button.classList.add("selected");
+
+      button.className =
+        "answer";
+
+
+      button.textContent =
+        answer[0];
+
+
+      if (
+        selectedAnswers[currentQuestion] === index
+      ) {
+
+        button.classList.add("selected");
+
+      }
+
+
+      button.onclick = () => {
+
+        selectedAnswers[currentQuestion] =
+          index;
+
+
+        document
+          .querySelectorAll(".answer")
+          .forEach(
+            el =>
+              el.classList.remove("selected")
+          );
+
+
+        button.classList.add("selected");
+
+
+        nextBtn.disabled =
+          false;
+
+      };
+
+
+      answersEl.appendChild(button);
+
     }
-
-    button.onclick = () => {
-
-      selectedAnswers[currentQuestion] = index;
-
-      document
-        .querySelectorAll(".answer")
-        .forEach(el => el.classList.remove("selected"));
-
-      button.classList.add("selected");
-
-      nextBtn.disabled = false;
-    };
-
-    answersEl.appendChild(button);
-
-  });
+  );
 
 
   nextBtn.textContent =
@@ -539,19 +881,35 @@ function renderQuestion() {
 
 
   prevBtn.style.visibility =
-    currentQuestion === 0 ? "hidden" : "visible";
+    currentQuestion === 0
+      ? "hidden"
+      : "visible";
 
 
   nextBtn.disabled =
     selectedAnswers[currentQuestion] === null;
+
 }
+
+
+/* =========================================================
+   НАВИГАЦИЯ
+========================================================= */
 
 
 nextBtn.onclick = () => {
 
-  if (selectedAnswers[currentQuestion] === null) return;
+  if (
+    selectedAnswers[currentQuestion] === null
+  ) {
+    return;
+  }
 
-  if (currentQuestion < questions.length - 1) {
+
+  if (
+    currentQuestion <
+    questions.length - 1
+  ) {
 
     currentQuestion++;
 
@@ -579,98 +937,323 @@ prevBtn.onclick = () => {
 };
 
 
+/* =========================================================
+   РЕЗУЛЬТАТ
+========================================================= */
+
+
 function showResult() {
 
   let total = 0;
 
-  selectedAnswers.forEach((answerIndex, questionIndex) => {
 
-    if (answerIndex !== null) {
+  selectedAnswers.forEach(
+    (answerIndex, questionIndex) => {
 
-      total +=
-        questions[questionIndex].answers[answerIndex][1];
+      if (answerIndex !== null) {
+
+        total +=
+          questions[questionIndex]
+            .answers[answerIndex][1];
+
+      }
 
     }
+  );
 
-  });
+
+  const maxScore =
+    questions.length * 2;
 
 
-  const maxScore = questions.length * 2;
+  document.getElementById("quiz")
+    .style.display = "none";
 
-  document.getElementById("quiz").style.display = "none";
 
-  document.getElementById("result").style.display = "block";
+  document.getElementById("result")
+    .style.display = "block";
 
-  document.getElementById("score").textContent =
-    `${total}/${maxScore}`;
+
+  document.getElementById("score")
+    .textContent =
+      `${total}/${maxScore}`;
 
 
   let title;
   let description;
-  let advice;
 
 
   if (total >= 20) {
 
-    title = "Фундамент готов";
+    title =
+      "Фундамент готов";
+
 
     description =
-      "Ваш продукт, оффер и посадочная в целом готовы к привлечению и масштабированию трафика.";
-
-    advice =
-      "Можно переходить к оптимизации маркетингового микса: сравнивать каналы, перераспределять бюджет и искать точки роста.";
-
-  } else if (total >= 13) {
-
-    title = "Есть точки роста";
-
-    description =
-      "Базовая маркетинговая конструкция есть, но отдельные элементы могут снижать эффективность рекламы.";
-
-    advice =
-      "Перед увеличением бюджета найдите 2–3 самых слабых места в продукте, оффере или посадочной и исправьте их.";
-
-  } else {
-
-    title = "Сначала фундамент";
-
-    description =
-      "Увеличение рекламного бюджета сейчас может просто увеличить стоимость существующих проблем.";
-
-    advice =
-      "Начните с продукта, оффера и посадочной. Сделайте предложение понятнее, добавьте доказательства и сократите путь до целевого действия.";
+      "Ваш продукт, оффер и посадочная в целом готовы к привлечению и масштабированию трафика. Теперь можно искать точки роста в маркетинговом миксе.";
 
   }
 
 
-  document.getElementById("resultTitle").textContent = title;
+  else if (total >= 13) {
 
-  document.getElementById("resultDescription").textContent =
-    description;
+    title =
+      "Есть точки роста";
 
-  document.getElementById("resultAdvice").textContent =
-    advice;
+
+    description =
+      "Базовая маркетинговая конструкция есть, но отдельные элементы могут снижать эффективность рекламы. Перед масштабированием стоит устранить несколько слабых мест.";
+
+  }
+
+
+  else {
+
+    title =
+      "Сначала фундамент";
+
+
+    description =
+      "Увеличение рекламного бюджета сейчас может просто увеличить стоимость существующих проблем. Начните с продукта, оффера и посадочной.";
+
+  }
+
+
+  document.getElementById("resultTitle")
+    .textContent =
+      title;
+
+
+  document.getElementById("resultDescription")
+    .textContent =
+      description;
+
+
+  generateRecommendations();
 
 }
+
+
+/* =========================================================
+   РЕКОМЕНДАЦИИ
+========================================================= */
+
+
+function generateRecommendations() {
+
+  const container =
+    document.getElementById("recommendations");
+
+
+  container.innerHTML = "";
+
+
+  let recommendations = [];
+
+
+  questions.forEach(
+    (question, index) => {
+
+      const answerIndex =
+        selectedAnswers[index];
+
+
+      if (answerIndex === null) {
+        return;
+      }
+
+
+      const score =
+        question.answers[answerIndex][1];
+
+
+      /*
+        0 баллов = высокий приоритет
+        1 балл = средний приоритет
+        2 балла = всё хорошо
+      */
+
+      if (score === 0) {
+
+        recommendations.push({
+
+          question: question,
+
+          score: score,
+
+          priority: "high",
+
+          priorityText: "Высокий приоритет"
+
+        });
+
+      }
+
+
+      else if (score === 1) {
+
+        recommendations.push({
+
+          question: question,
+
+          score: score,
+
+          priority: "medium",
+
+          priorityText: "Средний приоритет"
+
+        });
+
+      }
+
+    }
+  );
+
+
+  /*
+    Сначала высокий приоритет,
+    затем средний.
+  */
+
+  recommendations.sort(
+    (a, b) => {
+
+      const priorityOrder = {
+
+        high: 1,
+
+        medium: 2
+
+      };
+
+
+      return (
+        priorityOrder[a.priority] -
+        priorityOrder[b.priority]
+      );
+
+    }
+  );
+
+
+  /*
+    Нет слабых мест
+  */
+
+  if (recommendations.length === 0) {
+
+    container.innerHTML = `
+
+      <div class="no-recommendations">
+
+        <strong>
+          Отличный результат.
+        </strong>
+
+        <br><br>
+
+        По вашим ответам критических слабых мест
+        не обнаружено. Можно переходить к работе
+        с маркетинговым миксом: тестированию каналов,
+        перераспределению бюджета и поиску новых
+        точек роста.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  /*
+    Вывод рекомендаций
+  */
+
+  recommendations.forEach(
+    (item) => {
+
+      const recommendation =
+        item.question.recommendation;
+
+
+      const element =
+        document.createElement("div");
+
+
+      element.className =
+        "recommendation";
+
+
+      element.innerHTML = `
+
+        <div class="priority priority-${item.priority}">
+
+          ${item.priorityText}
+
+        </div>
+
+
+        <div class="recommendation-title">
+
+          ${recommendation.title}
+
+        </div>
+
+
+        <div class="recommendation-text">
+
+          ${recommendation.text}
+
+        </div>
+
+      `;
+
+
+      container.appendChild(element);
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   ПЕРЕЗАПУСК
+========================================================= */
 
 
 function restartQuiz() {
 
   currentQuestion = 0;
 
+
   selectedAnswers =
-    new Array(questions.length).fill(null);
+    new Array(questions.length)
+      .fill(null);
 
-  document.getElementById("result").style.display = "none";
 
-  document.getElementById("quiz").style.display = "block";
+  document.getElementById("result")
+    .style.display = "none";
+
+
+  document.getElementById("quiz")
+    .style.display = "block";
+
 
   renderQuestion();
 
 }
 
 
+/* =========================================================
+   ЗАПУСК
+========================================================= */
+
+
 renderQuestion();
+
 
 </script>
 
