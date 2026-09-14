@@ -669,9 +669,11 @@
     ========================= */
 
     .pdf-report {
-      position: absolute;
+      position: fixed;
       left: -100000px;
       top: 0;
+      z-index: -1000;
+      pointer-events: none;
       width: 794px;
       padding: 52px;
       background: #fff;
@@ -685,13 +687,22 @@
 
     .pdf-report-label {
       display: inline-block;
-      margin-bottom: 18px;
+      margin-bottom: 10px;
       padding: 7px 12px;
       border-radius: 999px;
       background: #e9eefc;
       color: #3454d1;
       font-size: 13px;
       font-weight: 700;
+    }
+
+    .pdf-report-site {
+      display: block;
+      margin-bottom: 18px;
+      color: #3454d1;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: underline;
     }
 
     .pdf-report h1 {
@@ -755,6 +766,7 @@
       border-radius: 14px;
       border: 1px solid #e3e6eb;
       background: #fff;
+      break-inside: avoid;
       page-break-inside: avoid;
     }
 
@@ -1057,7 +1069,7 @@
         <h3 class="plan-title">Ваш план действий</h3>
 
         <button class="pdf-btn" id="downloadPdfBtn" type="button">
-          ↓ Скачать результат в PDF
+          Скачать результаты в PDF
         </button>
       </div>
 
@@ -1186,6 +1198,14 @@
 
     <div class="pdf-report-header">
       <div class="pdf-report-label">Самоаудит маркетинга</div>
+
+      <a
+        class="pdf-report-site"
+        id="pdfReportSite"
+        href="https://audit.nikitakravchenko.ru"
+        target="_blank"
+        rel="noopener noreferrer"
+      >audit.nikitakravchenko.ru</a>
 
       <h1>Результат самоаудита</h1>
 
@@ -1430,7 +1450,7 @@
             score: 2
           },
           {
-            text: "Призыв к действию есть, но он не очень заметен",
+            text: "CTA есть, но он не очень заметен",
             score: 1
           },
           {
@@ -1608,6 +1628,7 @@
     const downloadPdfBtn = document.getElementById("downloadPdfBtn");
 
     const pdfReport = document.getElementById("pdfReport");
+    const pdfReportSite = document.getElementById("pdfReportSite");
     const pdfScore = document.getElementById("pdfScore");
     const pdfResultTitle = document.getElementById("pdfResultTitle");
     const pdfResultDescription = document.getElementById("pdfResultDescription");
@@ -2179,7 +2200,8 @@
           scale: 2,
           backgroundColor: "#ffffff",
           useCORS: true,
-          logging: false
+          logging: false,
+          windowWidth: 794
         });
 
         const {
@@ -2194,59 +2216,82 @@
 
         const pageWidth = 210;
         const pageHeight = 297;
-
         const margin = 10;
+        const usableWidth = pageWidth - margin * 2;
+        const pageContentHeight = pageHeight - margin * 2;
+        const pxPerMm = canvas.width / usableWidth;
+        const pageSourceHeight = pageContentHeight * pxPerMm;
 
-        const usableWidth =
-          pageWidth - margin * 2;
+        /*
+           Формируем границы страниц не по произвольной высоте картинки,
+           а по карточкам рекомендаций. Если карточка пересекает обычную
+           границу страницы, переносим её целиком на следующую страницу.
+        */
+        const reportRect = pdfReport.getBoundingClientRect();
+        const cards = Array.from(
+          pdfRecommendations.querySelectorAll(".pdf-report-recommendation")
+        );
 
-        const imageWidth =
-          usableWidth;
+        const cardBounds = cards.map(card => {
+          const rect = card.getBoundingClientRect();
 
-        const imageHeight =
-          canvas.height * imageWidth / canvas.width;
+          return {
+            top: (rect.top - reportRect.top) * (canvas.width / reportRect.width),
+            bottom: (rect.bottom - reportRect.top) * (canvas.width / reportRect.width)
+          };
+        });
 
-        const pageContentHeight =
-          pageHeight - margin * 2;
+        const pageStarts = [0];
+        let pageStart = 0;
 
-        let renderedHeight = 0;
-        let pageIndex = 0;
+        while (pageStart + pageSourceHeight < canvas.height - 1) {
 
-        while (renderedHeight < imageHeight) {
+          let pageEnd = pageStart + pageSourceHeight;
+
+          const crossingCard = cardBounds.find(card =>
+            card.top < pageEnd && card.bottom > pageEnd
+          );
+
+          if (crossingCard && crossingCard.top > pageStart + 1) {
+            pageEnd = crossingCard.top;
+          }
+
+          if (pageEnd <= pageStart + 1) {
+            pageEnd = pageStart + pageSourceHeight;
+          }
+
+          pageStarts.push(pageEnd);
+          pageStart = pageEnd;
+        }
+
+        const siteRect = pdfReportSite.getBoundingClientRect();
+        const siteScale = canvas.width / reportRect.width;
+        const siteBox = {
+          left: (siteRect.left - reportRect.left) * siteScale,
+          top: (siteRect.top - reportRect.top) * siteScale,
+          width: siteRect.width * siteScale,
+          height: siteRect.height * siteScale
+        };
+
+        pageStarts.forEach((sourceY, pageIndex) => {
 
           if (pageIndex > 0) {
             pdf.addPage();
           }
 
-          const remainingHeight =
-            imageHeight - renderedHeight;
-
-          const currentHeight =
-            Math.min(
-              pageContentHeight,
-              remainingHeight
-            );
-
-          const sourceY =
-            renderedHeight * canvas.width / imageWidth;
+          const nextSourceY =
+            pageStarts[pageIndex + 1] ?? canvas.height;
 
           const sourceHeight =
-            currentHeight * canvas.width / imageWidth;
+            Math.min(nextSourceY - sourceY, canvas.height - sourceY);
 
           const pageCanvas =
             document.createElement("canvas");
 
-          pageCanvas.width =
-            canvas.width;
+          pageCanvas.width = canvas.width;
+          pageCanvas.height = Math.ceil(sourceHeight);
 
-          pageCanvas.height =
-            Math.min(
-              Math.ceil(sourceHeight),
-              canvas.height - Math.floor(sourceY)
-            );
-
-          const pageContext =
-            pageCanvas.getContext("2d");
+          const pageContext = pageCanvas.getContext("2d");
 
           pageContext.drawImage(
             canvas,
@@ -2260,29 +2305,47 @@
             pageCanvas.height
           );
 
-          const pageImage =
-            pageCanvas.toDataURL(
-              "image/jpeg",
-              0.95
-            );
+          const pageImage = pageCanvas.toDataURL(
+            "image/jpeg",
+            0.95
+          );
 
           const pageImageHeight =
-            pageCanvas.height * imageWidth / pageCanvas.width;
+            pageCanvas.height * usableWidth / pageCanvas.width;
 
           pdf.addImage(
             pageImage,
             "JPEG",
             margin,
             margin,
-            imageWidth,
+            usableWidth,
             pageImageHeight
           );
 
-          renderedHeight +=
-            currentHeight;
+          /* Реально кликабельная ссылка, а не просто текст на картинке. */
+          const siteTopOnPage = siteBox.top - sourceY;
+          const siteBottomOnPage = siteTopOnPage + siteBox.height;
 
-          pageIndex++;
-        }
+          if (siteBottomOnPage > 0 && siteTopOnPage < pageCanvas.height) {
+
+            const linkTop = Math.max(0, siteTopOnPage);
+            const linkBottom = Math.min(
+              pageCanvas.height,
+              siteBottomOnPage
+            );
+
+            pdf.link(
+              margin + siteBox.left / pxPerMm,
+              margin + linkTop / pxPerMm,
+              siteBox.width / pxPerMm,
+              Math.max(1, (linkBottom - linkTop) / pxPerMm),
+              {
+                url: "https://audit.nikitakravchenko.ru"
+              }
+            );
+          }
+
+        });
 
         pdf.save(
           "rezultat-samoaudita-marketinga.pdf"
@@ -2301,12 +2364,11 @@
         downloadPdfBtn.disabled = false;
 
         downloadPdfBtn.textContent =
-          "↓ Скачать результат в PDF";
+          "Скачать результаты в PDF";
 
       }
 
     }
-
 
     downloadPdfBtn.addEventListener(
       "click",
