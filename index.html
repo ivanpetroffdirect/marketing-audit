@@ -829,7 +829,7 @@
       line-height: 1.55;
     }
 
-   .pdf-report-footer {
+    .pdf-report-footer {
       break-inside: avoid;
       page-break-inside: avoid;
       margin-top: 32px;
@@ -837,6 +837,15 @@
       border-top: 1px solid #e5e8ed;
       color: #969ca5;
       font-size: 11px;
+    }
+
+    .pdf-report-footer div + div {
+      margin-top: 4px;
+    }
+
+    .pdf-report-footer a {
+      color: inherit;
+      text-decoration: underline;
     }
 
     /* =========================
@@ -974,7 +983,7 @@
           <div class="stage" id="stage-3">
             <div class="stage-top">
               <div class="stage-dot">4</div>
-              <div class="stage-name">Продвижение</div>
+              <div class="stage-name">Маркетинг</div>
             </div>
             <div class="stage-line">
               <div class="stage-fill" id="stage-fill-3"></div>
@@ -1241,7 +1250,7 @@
         <a href="https://audit.nikitakravchenko.ru" target="_blank" rel="noopener noreferrer">audit.nikitakravchenko.ru</a>
       </div>
       <div>
-        © 2026 Автор&nbsp;<a href="https://t.me/+b4WeiE1SYrs1MjUy" target="_blank" rel="noopener noreferrer">Никита Кравченко</a>. Все права защищены.
+        © 2026 Создал&nbsp;<a href="https://t.me/+b4WeiE1SYrs1MjUy" target="_blank" rel="noopener noreferrer">Никита Кравченко</a>. Все права защищены.
       </div>
     </div>
 
@@ -1473,30 +1482,7 @@
       },
 
       {
-        category: "Посадочная страница",
-        question: "Можно ли совершить целевое действие быстро и без лишних шагов?",
-        answers: [
-          {
-            text: "Да, путь до целевого действия короткий",
-            score: 2
-          },
-          {
-            text: "Есть несколько лишних шагов",
-            score: 1
-          },
-          {
-            text: "Чтобы оставить заявку или купить, нужно пройти длинный путь",
-            score: 0
-          }
-        ],
-        recommendation: {
-          title: "Сократите путь до конверсии",
-          text: "Уберите лишние поля, переходы и действия. Проверьте мобильную версию и попробуйте пройти путь пользователя самостоятельно от рекламы до отправки заявки."
-        }
-      },
-
-      {
-        category: "Продвижение",
+        category: "Маркетинг",
         question: "Понимаете ли вы, какие рекламные каналы дают вам качественных клиентов?",
         answers: [
           {
@@ -1519,11 +1505,34 @@
       },
 
       {
-        category: "Продвижение",
-        question: "Есть ли у вас гипотезы, что именно ограничивает рост продаж сейчас: продукт, оффер, сайт, конкуренция и т.д.?",
+        category: "Маркетинг",
+        question: "Понимаете ли вы, какие показатели нужно отслеживать, чтобы оценивать эффективность маркетинга?",
         answers: [
           {
-            text: "Да, мы четко понимаем основные ограничения",
+            text: "Да, у нас настроена сквозная аналитика и понятны ключевые показатели",
+            score: 2
+          },
+          {
+            text: "Отслеживаем отдельные показатели, но полной картины нет",
+            score: 1
+          },
+          {
+            text: "В основном смотрим на заявки, клики или расходы",
+            score: 0
+          }
+        ],
+        recommendation: {
+          title: "Настройте измерение эффективности маркетинга",
+          text: "Определите ключевые показатели на пути от рекламы до продажи: стоимость качественного лида, конверсию в продажу, выручку, маржинальность и окупаемость маркетинга. Отслеживайте не только промежуточные показатели, но и бизнес-результат."
+        }
+      },
+
+      {
+        category: "Маркетинг",
+        question: "Есть ли у вас понимание, что именно ограничивает рост продаж сейчас?",
+        answers: [
+          {
+            text: "Да, мы понимаем основное ограничение",
             score: 2
           },
           {
@@ -1531,7 +1540,7 @@
             score: 1
           },
           {
-            text: "Абсолютно нет понимания, что сейчас является ограничением для продаж",
+            text: "Не понимаем, что сейчас является главным ограничением",
             score: 0
           }
         ],
@@ -1566,13 +1575,13 @@
       {
         name: "Посадочная",
         start: 6,
-        end: 9,
+        end: 8,
         title: "Почти готово",
         text: "Вы проверили продукт, оффер и посадочную страницу. Остался последний этап — понять, насколько эффективно работает ваш маркетинг и что ограничивает рост."
       },
       {
-        name: "Продвижение",
-        start: 10,
+        name: "Маркетинг",
+        start: 9,
         end: 11,
         title: "Самоаудит завершён",
         text: "Все 12 вопросов позади. Теперь соберём ваши ответы в итоговую оценку и покажем основные точки роста."
@@ -1637,6 +1646,7 @@
 
     const pdfReport = document.getElementById("pdfReport");
     const pdfReportSite = document.getElementById("pdfReportSite");
+    const pdfReportFooter = document.getElementById("pdfReportFooter");
     const pdfScore = document.getElementById("pdfScore");
     const pdfResultTitle = document.getElementById("pdfResultTitle");
     const pdfResultDescription = document.getElementById("pdfResultDescription");
@@ -2249,6 +2259,13 @@
           };
         });
 
+        const footerRect = pdfReportFooter.getBoundingClientRect();
+        const footerScale = canvas.width / reportRect.width;
+        const footerBounds = {
+          top: (footerRect.top - reportRect.top) * footerScale,
+          bottom: (footerRect.bottom - reportRect.top) * footerScale
+        };
+
         const pageStarts = [0];
         let pageStart = 0;
 
@@ -2264,6 +2281,13 @@
             pageEnd = crossingCard.top;
           }
 
+          // Футер — единый блок: не разрезаем его между страницами.
+          if (footerBounds.top < pageEnd && footerBounds.bottom > pageEnd) {
+            if (footerBounds.top > pageStart + 1) {
+              pageEnd = footerBounds.top;
+            }
+          }
+
           if (pageEnd <= pageStart + 1) {
             pageEnd = pageStart + pageSourceHeight;
           }
@@ -2272,14 +2296,18 @@
           pageStart = pageEnd;
         }
 
-        const siteRect = pdfReportSite.getBoundingClientRect();
-        const siteScale = canvas.width / reportRect.width;
-        const siteBox = {
-          left: (siteRect.left - reportRect.left) * siteScale,
-          top: (siteRect.top - reportRect.top) * siteScale,
-          width: siteRect.width * siteScale,
-          height: siteRect.height * siteScale
-        };
+        const reportScale = canvas.width / reportRect.width;
+        const linkElements = [pdfReportSite, ...pdfReportFooter.querySelectorAll("a")];
+        const linkBoxes = linkElements.map(link => {
+          const rect = link.getBoundingClientRect();
+          return {
+            left: (rect.left - reportRect.left) * reportScale,
+            top: (rect.top - reportRect.top) * reportScale,
+            width: rect.width * reportScale,
+            height: rect.height * reportScale,
+            url: link.href
+          };
+        });
 
         pageStarts.forEach((sourceY, pageIndex) => {
 
@@ -2330,28 +2358,24 @@
             pageImageHeight
           );
 
-          /* Реально кликабельная ссылка, а не просто текст на картинке. */
-          const siteTopOnPage = siteBox.top - sourceY;
-          const siteBottomOnPage = siteTopOnPage + siteBox.height;
+          /* Реально кликабельные ссылки, а не просто текст на картинке. */
+          linkBoxes.forEach(box => {
+            const linkTopOnPage = box.top - sourceY;
+            const linkBottomOnPage = linkTopOnPage + box.height;
 
-          if (siteBottomOnPage > 0 && siteTopOnPage < pageCanvas.height) {
+            if (linkBottomOnPage > 0 && linkTopOnPage < pageCanvas.height) {
+              const linkTop = Math.max(0, linkTopOnPage);
+              const linkBottom = Math.min(pageCanvas.height, linkBottomOnPage);
 
-            const linkTop = Math.max(0, siteTopOnPage);
-            const linkBottom = Math.min(
-              pageCanvas.height,
-              siteBottomOnPage
-            );
-
-            pdf.link(
-              margin + siteBox.left / pxPerMm,
-              margin + linkTop / pxPerMm,
-              siteBox.width / pxPerMm,
-              Math.max(1, (linkBottom - linkTop) / pxPerMm),
-              {
-                url: "https://audit.nikitakravchenko.ru"
-              }
-            );
-          }
+              pdf.link(
+                margin + box.left / pxPerMm,
+                margin + linkTop / pxPerMm,
+                box.width / pxPerMm,
+                Math.max(1, (linkBottom - linkTop) / pxPerMm),
+                { url: box.url }
+              );
+            }
+          });
 
         });
 
@@ -2553,7 +2577,7 @@ ${weakPointsText}
 
 Сделай таблицу:
 
-Компания | Основной оффер | Цена | Преимущества | Доказательства | CTA | Что можно перенять
+Компания | Основной оффер | Цена | Преимущества | Доказательства | Призыв к действию | Что можно перенять
 
 После таблицы ответь:
 
@@ -2573,7 +2597,7 @@ ${weakPointsText}
 
 Используй структуру:
 
-Для кого → проблема / потребность → решение → ключевая выгода → причина обратиться сейчас → CTA
+Для кого → проблема / потребность → решение → ключевая выгода → причина обратиться сейчас → Призыв к действию
 
 Варианты должны отличаться по логике:
 
@@ -2629,7 +2653,7 @@ ${weakPointsText}
 
 КОНВЕРСИЯ
 
-- насколько очевиден CTA;
+- насколько очевиден призыв к действию;
 - легко ли оставить заявку / купить / связаться;
 - сколько действий требуется;
 - что может мешать конверсии.
@@ -2649,7 +2673,7 @@ ${weakPointsText}
 Заголовок
 Подзаголовок
 3 ключевые выгоды
-CTA
+Призыв к действию
 Дополнительный элемент доверия
 
 Не используй пустые формулировки вроде
@@ -2689,23 +2713,29 @@ CTA
 - Яндекс Директ;
 - VK Реклама;
 - Telegram Ads;
+- Авито Реклама;
 - посевы в Telegram;
+— продвижение в MAX;
+- реклама у блогеров;
+- инфлюенс-маркетинг;
 - Авито;
-- Авито Реклама / Авито Promo;
 - маркетплейсы и retail media;
 - SEO;
 - контент-маркетинг;
 - медийная реклама;
-- реклама у блогеров;
 - email / CRM-маркетинг;
 - другие подходящие каналы.
 
 Не предлагай все каналы подряд.
 
-Выбери 3–5 наиболее перспективных и объясни,
+Выбери 5-7 наиболее перспективных и объясни,
 почему именно их стоит тестировать в первую очередь.
 
-Для каждого оцени:
+Если выбираешь каналы Яндекс Директ или VK Реклама объясни,
+какие именно инструменты использовать и почему. Например: Яндекс Директ Поиск,
+Яндекс Директ РСЯ, VK Реклама ретаргетинг и т.д.
+
+Для каждого канала оцени:
 
 - потенциал;
 - соответствие целевой аудитории;
@@ -2737,7 +2767,50 @@ CTA
 Объясни каждый вывод.
 
 
-10. ИТОГОВЫЙ ПЛАН ДЕЙСТВИЙ
+10. АНАЛИТИКА И ИЗМЕРЕНИЕ ЭФФЕКТИВНОСТИ
+
+Оцени, насколько понятно из доступной информации, как измерять эффективность маркетинга этого бизнеса.
+
+Определи:
+
+- какие показатели действительно важно отслеживать на пути от рекламы до продажи;
+- какие промежуточные метрики могут вводить в заблуждение;
+- какие показатели стоит использовать для оценки качества лидов и рекламных каналов;
+- как связать рекламные расходы с продажами, выручкой, маржинальностью и окупаемостью;
+- каких данных или настроек аналитики, вероятно, не хватает.
+
+Если по сайту и открытым источникам невозможно сделать вывод о наличии сквозной аналитики,
+не предполагай её наличие — укажи, что это нужно проверить.
+
+Предложи минимальный набор показателей, который бизнесу стоит регулярно контролировать,
+и объясни, какие решения можно принимать на их основе.
+
+
+11. ЧТО ОГРАНИЧИВАЕТ РОСТ
+
+Представь, что рекламный бюджет компании увеличили в 2 раза.
+
+Что может произойти?
+
+Определи 3 наиболее вероятных ограничения роста:
+
+- недостаточный спрос;
+- слабый оффер;
+- неправильная аудитория;
+- низкая конверсия сайта;
+- недостаток доверия;
+- высокая цена;
+- слабая экономика;
+- ограниченная ёмкость канала;
+- проблемы с обработкой заявок;
+- недостаточная повторная покупка;
+- проблемы с измерением эффективности;
+- другое.
+
+Объясни каждый вывод.
+
+
+12. ИТОГОВЫЙ ПЛАН ДЕЙСТВИЙ
 
 Сформируй конкретный план.
 
